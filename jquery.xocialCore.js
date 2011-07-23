@@ -29,6 +29,8 @@
 */
 
 ;(function($) {
+	
+$.getScript('https://raw.github.com/malsup/blockui/master/jquery.blockUI.js');	
 
 // Facebook Initialization and Login Functions
 	
