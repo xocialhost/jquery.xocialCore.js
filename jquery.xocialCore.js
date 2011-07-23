@@ -1,8 +1,16 @@
-/*
-Xocial Core 
-ver 1.0
+/* jQuery Xocial Core Plugin
+*  Plugin to access OpenMenu
+*  version 0.0.1, July 12, 2011
+*  by Dustin Nielson - http://www.xocialhost.com
+*  copyright: Copyright (c) 2011 Dustin Nielson for Xocial Host
+*  This plugin incorporates some revised MIT licensed plugins so some 
+*  sections Copyright the orignal authors.
+*  license: MIT
 */
+
 ;(function($) {
+
+// Facebook Initialization and Login Functions
 	
 $.xcInitFacebook = function(options){
 	
@@ -13,17 +21,30 @@ $.xcInitFacebook = function(options){
 	var settings = {
 	  
 	  'apiKey'		:	null,
-	  'callback'	:	null
-	  
+	  'callback'	:	null,
+	  'channelUrl'  :   null,
+	  'status'		:	true,
+	  'cookie'		:	true,
+	  'xfbml'		:	true
+	
 	};
 	
 	if ( options ) { 
-	$.extend( settings, options );
+		$.extend( settings, options );
 	}
 	
-	window.fbAsyncInit = function() { FB.init({appId: apiKey, status: true, cookie: true, xfbml: true, oauth: true, authResponse: true }); 
+	window.fbAsyncInit = function() { 
+	
+		if(settings.channelUrl==null) {
+	
+			FB.init({appId: settings.apiKey, status: settings.status, cookie: settings.cookie, xfbml: settings.xfbml, oauth: true, authResponse: true }); 
+			
+		} else {
+			
+			FB.init({appId: settings.apiKey, status: settings.status, cookie: settings.cookie, xfbml: settings.xfbml, oauth: true, authResponse: true, channelUrl: settings.channelUrl }); 
+		}
 		
-	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+		if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 	
 	};
   
@@ -147,17 +168,525 @@ $.xcFbLogin = function(options){
 	
 }
 
+
+//Xocialize Functions
+
+$.xcGetXocializeAccount = function(options){
+	
+	var settings = {
+		
+	  'pageId'		:	'',	
+	  'account'	    :   ''
+	  
+	};
+	
+	if ( options ) { 
+		$.extend( settings, options );
+	  }
+	
+}
+
+$.xcUpdateXocializeAccount = function(options){
+	
+	var settings = {
+		
+	  'pageId'		:	'',	
+	  'account'	    :   '',
+	  'accountId'	:	'',
+	  'access_token':	'',
+	  'user_id'		:	''
+	  
+	};
+	
+	if ( options ) { 
+		$.extend( settings, options );
+	  }
+	
+}
+
+// Social Media Functions
+
+$.fn.loadVimeoVideo = function(options){
+    
+    var settings = {
+      
+      'videoId'	   :	'',
+	  'color'	   :	'ff0179',
+      'width'      :    '480',
+      'height'     :    '390'
+      
+     };
+    
+    if ( options ) { 
+    $.extend( settings, options );
+    }
+    
+    $(this).html('<iframe src="http://player.vimeo.com/video/'+settings.videoId+'?title=0&amp;byline=0&amp;portrait=0&amp;color='+settings.color+'" width="'+settings.width+'" height="'+settings.height+'" frameborder="0"></iframe>');
+    
+}
+
+$.fn.loadYouTubeVideo = function(options){
+    
+    var settings = {
+      
+      'videoId'	   :	'',
+	  'color'	   :	'ff0179',
+      'width'      :    '480',
+      'height'     :    '390'
+      
+     };
+    
+    if ( options ) { 
+    $.extend( settings, options );
+    }
+    
+    $(this).html('<iframe width="'+settings.width+'" height="'+settings.height+'" src="http://www.youtube.com/embed/'+settings.videoId+'?rel=0" frameborder="0" allowfullscreen></iframe>');
+    
+}
+
+
+
+//Based largely on jGFeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
+$.xhGFeed = function(options,callbackFnk){
+	
+	$.blockUI();
+	
+	var settings = {
+	  
+	  'url'	:	null,
+	  'num'	:  8
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	 if(settings.url == null) return false;
+	  // Build Google Feed API URL
+	  var gurl = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&callback=?&q="+encodeURIComponent(settings.url);
+	  if(settings.num != null) gurl += "&num="+settings.num;
+	  if(settings.key != null) gurl += "&key="+settings.key;
+	  // AJAX request the API
+	  $.getJSON(gurl, function(data){
+		if(typeof callbackFnk == 'function') {
+		
+		  callbackFnk.call(this, data.responseData.feed);
+		  
+		  $.unblockUI();
+		  
+		} else
+		  return false;
+	  });
+	
+}
+
+// Based in large part on jQuery.tweetable from 
+$.fn.xhTweetable = function (options) {
+	
+		$.blockUI();
+	
+		var $obj = $(this);
+	
+		var date1 = new Date()
+		
+		date1=date1.toUTCString();
+		
+		//specify the plugins defauls
+        var defaults = {
+            limit: 15, 						//number of tweets to show
+            username: 'xocialhost', 	//@username tweets to display
+            time: false, 					//display date
+            replies: false,				//filter out @replys
+            position: 'append'			//append position
+        };
+        //overwrite the defaults
+        var options = $.extend(defaults, options);
+		
+		//assign our initial vars
+            var act = $(this);
+            var $tweetList;
+            var tweetMonth = '';
+            var shortMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+            var api = "//api.twitter.com/1/statuses/user_timeline.json?include_rts=1&screen_name=";
+            var count = "&count=";
+		
+		//loop through each instance
+       // return this.each(function (options) {
+			
+            //do a JSON request to twitters API
+           
+		   
+		   
+		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
+				
+                $.each(data, function (i, item) {
+					//check for the first loop
+                    if (i == 0) {
+                    	//create an unordered list to store tweets in
+						$obj.append('<p class="info" style="background-image: url('+item.user.profile_image_url+');">'+
+									'<span class="userName">'+item.user.name+'</span><br>'+
+									'<span class="screenName">@'+item.user.screen_name+'</span><br>'+
+									'<span class="twitterDescription">@'+item.user.description+'</span><br>'+
+									'</p><div id="xh_twitter_stream"></div>');
+                    }
+					
+					var myTxt = item.text.replace(/#(.*?)(\s|$)/g, '<span class="hash">#$1 </span>').replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$&" target="_blank">$&</a> ').replace(/@(.*?)(\s|\(|\)|$)/g, '<a href="http://twitter.com/$1" target="_blank">@$1 </a>$2');
+					
+					 var dStr = item.created_at;
+						
+						dStr = dStr.replace("+0000 ", "") + " GMT";
+						
+						var date2 = new Date(dStr);
+		
+						date2 = date2.toUTCString();
+						
+						if(typeof item.retweeted_status=='object') { 
+							
+							var profile_image_url=item.retweeted_status.user.profile_image_url; 
+							var screen_name=item.retweeted_status.user.screen_name + ' by ' +item.user.screen_name; 
+							var user_name=item.retweeted_status.user.name; 
+							
+						} else { 
+						
+							var profile_image_url=item.user.profile_image_url;
+							var screen_name=item.user.screen_name; 
+							var user_name=item.user.name;  
+							
+						}
+						
+						$('#xh_twitter_stream').append('' +
+				
+						'<div class="xh_twitter_header">'+
+						'<h3>'+user_name+' <span class="screenName">'+screen_name+'</span></h3>'+
+						'</div>'+
+						
+						'<div class="xh_twitter_content"><p class="info twitterContent" style="background-image: url('+profile_image_url+');">'+
+						
+						myTxt+
+						
+						'</p></div>'+
+						
+						'<div class="twitTime">'+$.timeAgo(date1,date2)+'</div>'+
+						
+						'');
+						
+						
+						
+                    
+                });
+                $.unblockUI();
+               });
+        
+}
+
+$.fn.xhCalendar = function(options,callback){
+	
+	if( typeof( xhCurrentMonth ) == 'undefined' || typeof( xhCurrentYear ) == 'undefined' || typeof( xhCurrentDay ) == 'undefined' ) { 
+	
+		var xhDate = new Date();
+		
+		window.xhCurrentDay = xhDate.getFullYear();
+		
+		window.xhCurrentMonth = xhDate.getMonth() + 1; 
+		
+		window.xhCurrentYear = xhDate.getFullYear(); 
+		
+	}  
+	
+	$obj = $(this); 
+	
+	var settings = {
+	  
+	  'action'	:	'getCalendar'
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	var params=settings;
+	
+	$.blockUI();
+	
+	$.ajax({
+
+	  dataType: 'json',
+	  type: 'POST',
+	  data: params,
+	  url: '/calendar',
+	  
+	  success: function (response) {
+		  
+		  $obj.html(response.calendar);
+		  
+		  if(typeof callback == 'function'){ callback.call(this); }
+		  
+		  $.unblockUI();
+		  
+	},
+	  error: function(){
+		  
+				alert('There was an error processing your request');
+		   }
+	});
+}
+
+$.xhEvents = function(options){
+	
+	$.blockUI();
+	
+	if( typeof( xhCurrentMonth ) == 'undefined' || typeof( xhCurrentYear ) == 'undefined' || typeof( xhCurrentDay ) == 'undefined' ) { 
+	
+		var xhDate = new Date();
+		
+		window.xhCurrentDay = xhDate.getFullYear();
+		
+		window.xhCurrentMonth = xhDate.getMonth() + 1; 
+		
+		window.xhCurrentYear = xhDate.getFullYear(); 
+		
+	}  
+	
+	var settings = {
+	  
+	  'action'			:	'getMonthEvents',
+	  'timezone'		:	xh_tz_info.timezone.olson_tz,
+	  'currentDay'		:	xhCurrentDay,
+	  'currentMonth'	:	xhCurrentMonth,
+	  'currentYear'		:	xhCurrentYear,
+	  'page_id'			:	fb_page_id,
+	  'app_id'			:	fb_application_id
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	var params=settings;
+	
+	var returnme=[];
+	
+	$.ajax({
+
+	  dataType: 'json',
+	  type: 'POST',
+	  data: params,
+	  async:false,
+	  url: '/calendar',
+	  
+	  success: function (response) {
+		  
+		returnme = response;
+		
+		$.unblockUI();
+		
+		  
+	},
+	  error: function(){
+		  
+				$.xcNotify('There was an error processing your request');
+		   }
+	});
+	
+	return returnme;
+}
+
+
 // Utility Section
+
+$.fn.xcAjax = function (options) {
+	
+	var $obj = $(this);
+	
+	var settings = {
+		
+	  'params'		:	'',	
+	  'preCallback'	:	null,	
+	  'postCallback':	null,	
+	  'target'		:	'',
+	  'form'		:	'',
+	  'action'		:   '',
+	  'dataType'	:   'json',
+	  'url'			:	''
+	  
+	};
+	
+	if ( options ) { 
+		$.extend( settings, options );
+	  }
+	  
+	if (settings.form!='') { if ( settings.params == '' ) { settings.params=$('#'+settings.form).serialize(); } else { settings.params=settings.params+'&'+$('#'+settings.form).serialize(); } }
+	  
+	if (settings.action!='') { if ( settings.params == '' )  { settings.params='action='+settings.action; } else { settings.params=settings.params+'&action='+settings.action; } }
+	
+	FB.getLoginStatus(function(response) {
+		
+		  if (response.status === 'connected') { 
+		  
+		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+			
+			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&user_id='+response.authResponse.signedRequest; } 
+		  
+		  }
+	});
+	
+	if(typeof settings.preCallback == 'function'){ settigs.preCallback.call(this); }
+		  
+	$.ajax({
+		
+	  dataType: dataType,
+	  type: 'POST',
+	  data: settings.params,
+	  url: settings.url,
+	  success: function (response) {
+		  
+		 if(settings.target!=''){
+			 
+			 	$('#'+settings.target).html(response.html_content);
+			 
+		 } else { 
+		 
+		 		$obj.html(response.html_content); 
+			 
+		}
+		  
+			if(typeof settings.postCallback == 'function'){ settings.postCallback.call(this); }
+		 
+		},
+	  error: function(){
+		  
+		  		$.xcNotify('There was an error processing your request');
+		   }
+	});
+
+}
+
+$.timeAgo = function(date1, date2, granularity){
+	
+	var self = this;
+	
+	periods = [];
+	periods['week'] = 604800;
+	periods['day'] = 86400;
+	periods['hour'] = 3600;
+	periods['minute'] = 60;
+	periods['second'] = 1;
+	
+	if(!granularity){
+		granularity = 5;
+	}
+	
+	(typeof(date1) == 'string') ? date1 = new Date(date1).getTime() / 1000 : date1 = new Date().getTime() / 1000;
+	(typeof(date2) == 'string') ? date2 = new Date(date2).getTime() / 1000 : date2 = new Date().getTime() / 1000;
+	
+	if(date1 > date2){
+		difference = date1 - date2;
+	}else{
+		difference = date2 - date1;
+	}
+
+	output = '';
+	
+	for(var period in periods){
+		var value = periods[period];
+		
+		if(difference >= value){
+			time = Math.floor(difference / value);
+			difference %= value;
+			
+			output = output +  time + ' ';
+			
+			if(time > 1){
+				output = output + period + 's ';
+			}else{
+				output = output + period + ' ';
+			}
+		}
+		
+		granularity--;
+		if(granularity == 0){
+			break;
+		}	
+	}
+	
+	return output + ' ago';
+}
+
 
 $.xcNotify = function(msg){
 	
-	alert(msg);
+	if(typeof $.blockUI == 'function'){  //Check to see if $.blockUI is a function.  If so we have the block UI plugin installed so use it.
+	
+		$.blockUI({ 
+            message: msg, 
+            fadeIn: 700, 
+            fadeOut: 700, 
+            timeout: 2000, 
+            showOverlay: false, 
+            centerY: false, 
+            css: { 
+                width: '350px', 
+                top: '10px', 
+                left: '', 
+                right: '10px', 
+                border: 'none', 
+                padding: '5px', 
+                backgroundColor: '#000', 
+                '-webkit-border-radius': '10px', 
+                '-moz-border-radius': '10px', 
+                opacity: .6, 
+                color: '#fff' 
+            } 
+        }); 
+		
+	} else {
+	
+		alert(msg);
+	
+	}
 }
 
 $.trim = function (strng) {
+	
 	return strng.replace(/^\s+|\s+$/g,"");
 }
 
+$.fn.clearForm = function() {
+  return this.each(function() {
+ var type = this.type, tag = this.tagName.toLowerCase();
+ if (tag == 'form')
+   return $(':input',this).clearForm();
+ if (type == 'text' || type == 'password' || tag == 'textarea' || type == 'hidden')
+   this.value = '';
+ else if (type == 'checkbox' || type == 'radio')
+   this.checked = false;
+ else if (tag == 'select')
+   this.selectedIndex = 0;
+  });
+};
+
+Object.size = function(obj) {
+	var size = 0, key;
+	for (key in obj) {
+		if (obj.hasOwnProperty(key)) size++;
+	}
+	return size;
+};
+
+
+// Arguments are image paths relative to the current page.
+$.preLoadImages = function() {
+	if( typeof( cache ) == 'undefined' ) { window.cache = []; }  
+	var args_len = arguments.length;
+	for (var i = args_len; i--;) {
+	  var cacheImage = document.createElement('img');
+	  cacheImage.src = arguments[i];
+	  cache.push(cacheImage);
+	}
+}
 
 /* end Xocial Core */	
 })(jQuery);	
