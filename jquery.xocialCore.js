@@ -409,7 +409,7 @@ $.fn.xcTweetable = function (options) {
 						
 						$('#xh_twitter_stream').append('' +
 				
-						'<div class="xh_twitter_header">'+
+						'<div class="xh_header">'+
 						'<h3>'+user_name+' <span class="screenName">'+screen_name+'</span></h3>'+
 						'</div>'+
 						
