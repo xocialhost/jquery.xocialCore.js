@@ -214,8 +214,6 @@ $.xcGetXocializeAccount = function(options){
 	  // AJAX request the API
 	  $.getJSON(url, function(data){
 		  
-		  alert(3);
-		  
 		if(typeof settings.callback == 'function') {
 		
 		  settings.callback.call(this, data);
