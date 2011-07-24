@@ -299,7 +299,7 @@ $.fn.loadYouTubeVideo = function(options){
 
 
 //Based largely on jGFeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
-$.xhGFeed = function(options,callbackFnk){
+$.xcGFeed = function(options,callbackFnk){
 	
 	$.blockUI();
 	
@@ -334,7 +334,7 @@ $.xhGFeed = function(options,callbackFnk){
 }
 
 // Based in large part on jQuery.tweetable from 
-$.fn.xhTweetable = function (options) {
+$.fn.xcTweetable = function (options) {
 	
 		$.blockUI();
 	
@@ -432,7 +432,7 @@ $.fn.xhTweetable = function (options) {
         
 }
 
-$.fn.xhCalendar = function(options,callback){
+$.fn.xcCalendar = function(options,callback){
 	
 	if( typeof( xhCurrentMonth ) == 'undefined' || typeof( xhCurrentYear ) == 'undefined' || typeof( xhCurrentDay ) == 'undefined' ) { 
 	
@@ -485,7 +485,7 @@ $.fn.xhCalendar = function(options,callback){
 	});
 }
 
-$.xhEvents = function(options){
+$.xcEvents = function(options){
 	
 	$.blockUI();
 	
