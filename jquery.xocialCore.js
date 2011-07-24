@@ -32,8 +32,6 @@
 	
 $.getScript('https://raw.github.com/malsup/blockui/master/jquery.blockUI.js');	
 
-var xc_href = document.location.href;
-
 // Facebook Initialization and Login Functions
 	
 $.xcInitFacebook = function(options){
@@ -56,6 +54,8 @@ $.xcInitFacebook = function(options){
 	if ( options ) { 
 		$.extend( settings, options );
 	}
+	
+	if( typeof( xc_app_id ) == 'undefined' ) { window.xc_app_id = settings.appId; }  
 	
 	window.fbAsyncInit = function() { 
 	
@@ -200,13 +200,29 @@ $.xcGetXocializeAccount = function(options){
 	var settings = {
 		
 	  'pageId'		:	'',	
-	  'account'	    :   ''
+	  'account'	    :   '',
+	  'callback'	:   null
 	  
 	};
 	
 	if ( options ) { 
 		$.extend( settings, options );
 	  }
+	  
+	var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?";
+	  
+	  // AJAX request the API
+	  $.getJSON(url, function(data){
+		  
+		  alert(3);
+		  
+		if(typeof settings.callback == 'function') {
+		
+		  settings.callback.call(this, data);
+		  
+		} else
+		  return false;
+	  });
 	
 }
 
@@ -217,14 +233,28 @@ $.xcUpdateXocializeAccount = function(options){
 	  'pageId'		:	'',	
 	  'account'	    :   '',
 	  'accountId'	:	'',
-	  'access_token':	'',
-	  'user_id'		:	''
+	  'params'		:	''
 	  
 	};
 	
 	if ( options ) { 
 		$.extend( settings, options );
 	  }
+	  
+	if ( settings.params == '' )  { settings.params='accountId='+settings.accountId; } else { settings.params=settings.params+'&accountId='+settings.accountId; } 
+	
+	if ( settings.params == '' )  { settings.params='account='+settings.account; } else { settings.params=settings.params+'&account='+settings.account; } 
+	
+	FB.getLoginStatus(function(response) {
+		
+		  if (response.status === 'connected') { 
+		  
+		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+			
+			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
+		  
+		  }
+	});
 	
 }
 
@@ -671,6 +701,20 @@ $.xcNotify = function(msg){
 		alert(msg);
 	
 	}
+}
+
+$.xcFanGate = function(options){
+	
+	var settings = {
+		
+	  
+	};
+	
+	if ( options ) { 
+		$.extend( settings, options );
+	  }
+	
+	
 }
 
 $.trim = function (strng) {
