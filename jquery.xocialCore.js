@@ -32,6 +32,8 @@
 	
 $.getScript('https://raw.github.com/malsup/blockui/master/jquery.blockUI.js');	
 
+var xc_href = document.location.href;
+
 // Facebook Initialization and Login Functions
 	
 $.xcInitFacebook = function(options){
@@ -550,7 +552,7 @@ $.fn.xcAjax = function (options) {
 		  
 		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
 			
-			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&user_id='+response.authResponse.signedRequest; } 
+			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
 		  
 		  }
 	});
