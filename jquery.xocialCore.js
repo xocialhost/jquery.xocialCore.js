@@ -369,16 +369,12 @@ $.fn.xcTweetable = function (options) {
 			
             //do a JSON request to twitters API
            
-		   
-		   
-		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
+		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?",  function (data) {
 				
 					if(typeof settings.callback == 'function') {
 		
 					  settings.callback.call(this, data);
-					  
-					  $.unblockUI();
-					  
+					
 					} else
 					  return false;
                 
