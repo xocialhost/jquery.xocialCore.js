@@ -335,7 +335,7 @@ $.xcGFeed = function(options,callbackFnk){
 }
 
 // Based in large part on jQuery.tweetable from 
-$.fn.xcTweetable = function (options) {
+$.xcTweetable = function (options) {
 	
 	
 		var $obj = $(this);
@@ -357,7 +357,6 @@ $.fn.xcTweetable = function (options) {
         var options = $.extend(defaults, options);
 		
 		//assign our initial vars
-            var act = $(this);
             var $tweetList;
             var tweetMonth = '';
             var shortMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -372,8 +371,6 @@ $.fn.xcTweetable = function (options) {
 		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?",  function (data) {
 				
 				if(typeof (defaults.callback) == 'function') {
-					
-						alert('here');
 					
 						defaults.callback.call(this, data);
 					
