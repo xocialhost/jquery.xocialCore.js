@@ -337,9 +337,6 @@ $.xcGFeed = function(options,callbackFnk){
 // Based in large part on jQuery.tweetable from 
 $.xcTweetable = function (options) {
 	
-	
-		var $obj = $(this);
-	
 		var date1 = new Date()
 		
 		date1=date1.toUTCString();
