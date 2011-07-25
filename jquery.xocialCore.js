@@ -226,6 +226,8 @@ $.xcGetXocializeAccount = function(options){
 
 $.xcUpdateXocializeAccount = function(options){
 	
+	$.blockUI();
+	
 	var settings = {
 		
 	  'pageId'		:	'',	
@@ -243,22 +245,41 @@ $.xcUpdateXocializeAccount = function(options){
 		
 		  if (response.status === 'connected') { 
 		  
-		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+		  	settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
 			
-			var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?&auth_token="+response.authResponse.accessToken+"&account_id="+settings.accountId;
+			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
 			
-			$.getJSON(url, function(data){
-		  
-				if(typeof settings.callback == 'function') {
-				
-				  settings.callback.call(this, data);
+			settings.params=settings.params+'&account_id='+settings.accountId; 
+			
+			settings.params=settings.params+'&account='+settings.account; 
+			
+			settings.params=settings.params+'&page_id='+settings.pageId;
+			
+			settings.params=settings.params+'&action=updateXocialize';
+			
+			$.ajax({
+
+			  dataType: 'json',
+			  type: 'POST',
+			  data: settings.params,
+			  async:false,
+			  url: '/xc_core_helper',
+			  
+			  success: function (response) {
 				  
-				} else
-				  return false;
-			  });
+					$.unblockUI();
+				
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+				   }
+			});
+			 
 			
-		  
-		  }
+		 }
 	});
 	
 }
