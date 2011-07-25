@@ -373,6 +373,8 @@ $.fn.xcTweetable = function (options) {
 				
 				if(typeof (defaults.callback) == 'function') {
 					
+						alert('here');
+					
 						defaults.callback.call(this, data);
 					
 					} else { return false; }
