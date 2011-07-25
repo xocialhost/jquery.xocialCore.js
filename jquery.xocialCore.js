@@ -364,6 +364,9 @@ $.xcTweetable = function (options) {
 		//loop through each instance
        // return this.each(function (options) {
 			
+			alert(api + defaults.username + count + defaults.limit + "&callback=?");
+			
+			return;
             //do a JSON request to twitters API
            $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
 				
