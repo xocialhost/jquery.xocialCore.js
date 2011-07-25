@@ -245,7 +245,7 @@ $.xcUpdateXocializeAccount = function(options){
 		
 		  if (response.status === 'connected') { 
 		  
-		  	settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
+		  	settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
 			
 			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
 			
