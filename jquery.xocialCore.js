@@ -371,6 +371,8 @@ $.fn.xcTweetable = function (options) {
            
 		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?",  function (data) {
 				
+				alert('here');
+				
 					if(typeof settings.callback == 'function') {
 		
 					  settings.callback.call(this, data);
