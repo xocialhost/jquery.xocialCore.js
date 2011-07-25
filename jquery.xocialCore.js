@@ -231,6 +231,7 @@ $.xcUpdateXocializeAccount = function(options){
 	  'pageId'		:	'',	
 	  'account'	    :   '',
 	  'accountId'	:	'',
+	  'callback'	:	null,
 	  'params'		:	''
 	  
 	};
@@ -239,17 +240,22 @@ $.xcUpdateXocializeAccount = function(options){
 		$.extend( settings, options );
 	  }
 	  
-	if ( settings.params == '' )  { settings.params='accountId='+settings.accountId; } else { settings.params=settings.params+'&accountId='+settings.accountId; } 
-	
-	if ( settings.params == '' )  { settings.params='account='+settings.account; } else { settings.params=settings.params+'&account='+settings.account; } 
-	
 	FB.getLoginStatus(function(response) {
 		
 		  if (response.status === 'connected') { 
 		  
-		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
-			
-			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
+		  	var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?&access_token="+response.authResponse.accessToken+"&account_id="+settings.accountId;
+	  
+			  // AJAX request the API
+			  $.getJSON(url, function(data){
+				  
+				if(typeof settings.callback == 'function') {
+				
+				  settings.callback.call(this, data);
+				  
+				} else
+				  return false;
+			  });
 		  
 		  }
 	});
@@ -334,9 +340,7 @@ $.xcGFeed = function(options,callbackFnk){
 }
 
 // Based in large part on jQuery.tweetable from 
-$.fn.xcTweetable = function (options) {
-	
-		var $obj = $(this);
+$.xcTweetable = function (options) {
 	
 		var date1 = new Date()
 		
@@ -368,7 +372,11 @@ $.fn.xcTweetable = function (options) {
             //do a JSON request to twitters API
            $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
 				
+					alert('1');
+				
 				if(typeof settings.callback == 'function') {
+					
+					alert('2');
 		
 				  settings.callback.call(this, data);
 				  
