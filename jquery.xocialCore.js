@@ -239,9 +239,7 @@ $.xcUpdateXocializeAccount = function(options){
 		$.extend( settings, options );
 	  }
 	  
-	if ( settings.params == '' )  { settings.params='accountId='+settings.accountId; } else { settings.params=settings.params+'&accountId='+settings.accountId; } 
 	
-	if ( settings.params == '' )  { settings.params='account='+settings.account; } else { settings.params=settings.params+'&account='+settings.account; } 
 	
 	FB.getLoginStatus(function(response) {
 		
@@ -249,7 +247,17 @@ $.xcUpdateXocializeAccount = function(options){
 		  
 		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
 			
-			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
+			var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?&auth_token="+response.authResponse.accessToken+"&account_id="+settings.accountId;
+			
+			$.getJSON(url, function(data){
+		  
+				if(typeof settings.callback == 'function') {
+				
+				  settings.callback.call(this, data);
+				  
+				} else
+				  return false;
+			  });
 			
 		  
 		  }
@@ -337,10 +345,6 @@ $.xcGFeed = function(options,callbackFnk){
 // Based in large part on jQuery.tweetable from 
 $.xcTweetable = function (options) {
 	
-		var date1 = new Date()
-		
-		date1=date1.toUTCString();
-		
 		//specify the plugins defauls
         var defaults = {
             limit: 15, 						//number of tweets to show
