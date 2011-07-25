@@ -231,6 +231,7 @@ $.xcUpdateXocializeAccount = function(options){
 	  'pageId'		:	'',	
 	  'account'	    :   '',
 	  'accountId'	:	'',
+	  'callback'	:	null,
 	  'params'		:	''
 	  
 	};
