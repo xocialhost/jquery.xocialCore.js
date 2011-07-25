@@ -347,7 +347,8 @@ $.fn.xcTweetable = function (options) {
 		//specify the plugins defauls
         var defaults = {
             limit: 15, 						//number of tweets to show
-            username: 'xocialhost', 	//@username tweets to display
+            username: 'xocialhost',
+			callback:null, 	
             time: false, 					//display date
             replies: false,				//filter out @replys
             position: 'append'			//append position
@@ -372,61 +373,15 @@ $.fn.xcTweetable = function (options) {
 		   
 		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
 				
-                $.each(data, function (i, item) {
-					//check for the first loop
-                    if (i == 0) {
-                    	//create an unordered list to store tweets in
-						$obj.append('<p class="info" style="background-image: url('+item.user.profile_image_url+');">'+
-									'<span class="userName">'+item.user.name+'</span><br>'+
-									'<span class="screenName">@'+item.user.screen_name+'</span><br>'+
-									'<span class="twitterDescription">@'+item.user.description+'</span><br>'+
-									'</p><div id="xh_twitter_stream"></div>');
-                    }
-					
-					var myTxt = item.text.replace(/#(.*?)(\s|$)/g, '<span class="hash">#$1 </span>').replace(/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig, '<a href="$&" target="_blank">$&</a> ').replace(/@(.*?)(\s|\(|\)|$)/g, '<a href="http://twitter.com/$1" target="_blank">@$1 </a>$2');
-					
-					 var dStr = item.created_at;
-						
-						dStr = dStr.replace("+0000 ", "") + " GMT";
-						
-						var date2 = new Date(dStr);
+					if(typeof settings.callback == 'function') {
 		
-						date2 = date2.toUTCString();
-						
-						if(typeof item.retweeted_status=='object') { 
-							
-							var profile_image_url=item.retweeted_status.user.profile_image_url; 
-							var screen_name=item.retweeted_status.user.screen_name + ' by ' +item.user.screen_name; 
-							var user_name=item.retweeted_status.user.name; 
-							
-						} else { 
-						
-							var profile_image_url=item.user.profile_image_url;
-							var screen_name=item.user.screen_name; 
-							var user_name=item.user.name;  
-							
-						}
-						
-						$('#xh_twitter_stream').append('' +
-				
-						'<div class="xh_twitter_header">'+
-						'<h3>'+user_name+' <span class="screenName">'+screen_name+'</span></h3>'+
-						'</div>'+
-						
-						'<div class="xh_twitter_content"><p class="info twitterContent" style="background-image: url('+profile_image_url+');">'+
-						
-						myTxt+
-						
-						'</p></div>'+
-						
-						'<div class="twitTime">'+$.timeAgo(date1,date2)+'</div>'+
-						
-						'');
-						
-						
-						
-                    
-                });
+					  settings.callback.call(this, data);
+					  
+					  $.unblockUI();
+					  
+					} else
+					  return false;
+                
                 //close the unordered list
                });
         
