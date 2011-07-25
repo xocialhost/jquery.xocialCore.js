@@ -226,7 +226,7 @@ $.xcGetXocializeAccount = function(options){
 
 $.xcUpdateXocializeAccount = function(options){
 	
-	$.blockUI();
+	//$.blockUI();
 	
 	var settings = {
 		
@@ -281,6 +281,8 @@ $.xcUpdateXocializeAccount = function(options){
 			
 		 }
 	});
+	
+	$.unblockUI();
 	
 }
 
