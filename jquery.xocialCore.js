@@ -371,12 +371,11 @@ $.fn.xcTweetable = function (options) {
            
 		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?",  function (data) {
 				
-				if(typeof settings.callback == 'function') {
+				if(typeof (defaults.callback) == 'function') {
 					
-						settings.callback.call(this, data);
+						defaults.callback.call(this, data);
 					
-					} else
-					  return false;
+					} else { return false; }
                 
                 //close the unordered list
                });
