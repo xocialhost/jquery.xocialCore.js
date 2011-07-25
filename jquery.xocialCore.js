@@ -239,8 +239,6 @@ $.xcUpdateXocializeAccount = function(options){
 		$.extend( settings, options );
 	  }
 	  
-	
-	
 	FB.getLoginStatus(function(response) {
 		
 		  if (response.status === 'connected') { 
@@ -346,7 +344,7 @@ $.xcGFeed = function(options,callbackFnk){
 $.xcTweetable = function (options) {
 	
 		//specify the plugins defauls
-        var defaults = {
+        var settings = {
             limit: 15, 						//number of tweets to show
             username: 'xocialhost',
 			callback:null, 	
@@ -355,7 +353,7 @@ $.xcTweetable = function (options) {
             position: 'append'			//append position
         };
         //overwrite the defaults
-        var options = $.extend(defaults, options);
+        var options = $.extend(settings, options);
 		
 		//assign our initial vars
             var $tweetList;
@@ -369,11 +367,11 @@ $.xcTweetable = function (options) {
 			
             //do a JSON request to twitters API
            
-		    $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?",  function (data) {
+		    $.getJSON(api + settings.username + count + settings.limit + "&callback=?",  function (data) {
 				
-				if(typeof (defaults.callback) == 'function') {
+				if(typeof (settings.callback) == 'function') {
 					
-						defaults.callback.call(this, data);
+						settings.callback.call(this, data);
 					
 					} else { return false; }
                 
