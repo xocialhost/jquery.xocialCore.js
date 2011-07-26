@@ -353,17 +353,45 @@ $.xcGFeed = function(options,callbackFnk){
 	  if(settings.num != null) gurl += "&num="+settings.num;
 	  if(settings.key != null) gurl += "&key="+settings.key;
 	  // AJAX request the API
-	  $.getJSON(gurl, function(data){
-		if(typeof settings.callback == 'function') {
-		
-		  settings.callback.call(this, data.responseData.feed);
-		  
-		  $.unblockUI();
-		  
-		} else
-		  return false;
-	  });
-	
+	  
+	  $.ajax({
+
+			  dataType: 'jsonp',
+			  url: gurl,
+			  timeout:2000,
+			  success: function (data) {
+				  
+					if(typeof (settings.callback) == 'function') {
+					
+						settings.callback.call(this, data);
+					
+					} else { return false; }
+				
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+						
+						var data={};
+						
+						data.error=1;
+						
+						if(typeof (settings.callback) == 'function') {
+					
+							settings.callback.call(this, data);
+					
+						} else { return false; }
+				   },
+			  statusCode: {
+				404: function() {
+				  alert('page not found');
+				}
+			  }
+				  
+			});
+	  
 }
 
 // Based in large part on jQuery.tweetable from 
