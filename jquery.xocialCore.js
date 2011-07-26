@@ -409,7 +409,13 @@ $.xcTweetable = function (options) {
 				  		$.unblockUI();
 				  
 						$.xcNotify('There was an error processing your request');
-				   }
+				   },
+			  statusCode: {
+				404: function() {
+				  alert('page not found');
+				}
+			  }
+				  
 			});
 			
            
