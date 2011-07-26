@@ -269,7 +269,7 @@ $.xcUpdateXocializeAccount = function(options){
 				  
 					$.unblockUI();
 					
-					$.xcNotify('Update Process Complete');
+					$.xcNotify('<span style="font-size:12px;font-weight:bold;">Update Process Complete</span>');
 				
 				},
 			  error: function(){
@@ -337,8 +337,9 @@ $.xcGFeed = function(options,callbackFnk){
 	
 	var settings = {
 	  
-	  'url'	:	null,
-	  'num'	:  8
+	  'url'		:	null,
+	  'callback':	null,
+	  'num'		:  8
 	  
 	};
 	
@@ -353,9 +354,9 @@ $.xcGFeed = function(options,callbackFnk){
 	  if(settings.key != null) gurl += "&key="+settings.key;
 	  // AJAX request the API
 	  $.getJSON(gurl, function(data){
-		if(typeof callbackFnk == 'function') {
+		if(typeof settings.callback == 'function') {
 		
-		  callbackFnk.call(this, data.responseData.feed);
+		  settings.callback.call(this, data.responseData.feed);
 		  
 		  $.unblockUI();
 		  
