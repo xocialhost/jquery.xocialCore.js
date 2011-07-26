@@ -394,7 +394,7 @@ $.xcTweetable = function (options) {
 
 			  dataType: 'jsonp',
 			  url: api + settings.username + count + settings.limit,
-			  timeout:1000,
+			  timeout:2000,
 			  success: function (data) {
 				  
 					if(typeof (settings.callback) == 'function') {
@@ -414,7 +414,11 @@ $.xcTweetable = function (options) {
 						
 						data.error=1;
 						
-						settings.callback.call(this, data);
+						if(typeof (settings.callback) == 'function') {
+					
+							settings.callback.call(this, data);
+					
+						} else { return false; }
 				   },
 			  statusCode: {
 				404: function() {
