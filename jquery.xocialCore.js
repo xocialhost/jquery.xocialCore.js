@@ -226,7 +226,7 @@ $.xcGetXocializeAccount = function(options){
 
 $.xcUpdateXocializeAccount = function(options){
 	
-	//$.blockUI();
+	$.blockUI();
 	
 	var settings = {
 		
@@ -391,6 +391,8 @@ $.xcTweetable = function (options) {
             //do a JSON request to twitters API
            
 		    $.getJSON(api + settings.username + count + settings.limit + "&callback=?",  function (data) {
+				
+				alert(data);
 				
 				if(typeof (settings.callback) == 'function') {
 					
