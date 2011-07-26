@@ -268,6 +268,8 @@ $.xcUpdateXocializeAccount = function(options){
 			  success: function (response) {
 				  
 					$.unblockUI();
+					
+					$.xcNotify('Update Process Complete');
 				
 				},
 			  error: function(){
