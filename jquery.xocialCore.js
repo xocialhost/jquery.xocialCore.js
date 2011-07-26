@@ -389,19 +389,31 @@ $.xcTweetable = function (options) {
        // return this.each(function (options) {
 			
             //do a JSON request to twitters API
-           
-		    $.getJSON(api + settings.username + count + settings.limit + "&callback=?",  function (data) {
-				
-				alert('test');
-				
-				if(typeof (settings.callback) == 'function') {
+			
+			$.ajax({
+
+			  dataType: 'jsonp',
+			  url: api + settings.username + count + settings.limit,
+			  
+			  success: function (data) {
+				  
+					if(typeof (settings.callback) == 'function') {
 					
 						settings.callback.call(this, data);
 					
 					} else { return false; }
-                
-                //close the unordered list
-               });
+				
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+				   }
+			});
+			
+           
+		   
         
 }
 
