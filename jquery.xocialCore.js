@@ -358,7 +358,7 @@ $.xcGFeed = function(options,callbackFnk){
 
 			  dataType: 'jsonp',
 			  url: gurl,
-			  timeout:2000,
+			  timeout:5000,
 			  success: function (data) {
 				  
 					if(typeof (settings.callback) == 'function') {
