@@ -333,7 +333,7 @@ $.fn.loadYouTubeVideo = function(options){
 //Based largely on jGFeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
 $.xcGFeed = function(options,callbackFnk){
 	
-	$.blockUI();
+	//$.blockUI();
 	
 	var settings = {
 	  
@@ -363,7 +363,7 @@ $.xcGFeed = function(options,callbackFnk){
 				  
 					if(typeof (settings.callback) == 'function') {
 					
-						settings.callback.call(this, data);
+						settings.callback.call(this, data.responseData.feed);
 					
 					} else { return false; }
 				
