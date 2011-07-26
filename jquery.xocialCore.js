@@ -394,7 +394,7 @@ $.xcTweetable = function (options) {
 
 			  dataType: 'jsonp',
 			  url: api + settings.username + count + settings.limit,
-			  
+			  timeout:1000,
 			  success: function (data) {
 				  
 					if(typeof (settings.callback) == 'function') {
