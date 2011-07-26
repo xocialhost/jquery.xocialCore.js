@@ -409,6 +409,12 @@ $.xcTweetable = function (options) {
 				  		$.unblockUI();
 				  
 						$.xcNotify('There was an error processing your request');
+						
+						var data={};
+						
+						data.error=1;
+						
+						settings.callback.call(this, data);
 				   },
 			  statusCode: {
 				404: function() {
