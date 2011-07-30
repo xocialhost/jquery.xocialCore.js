@@ -595,7 +595,7 @@ $.xcGetPhotos = function(options) {
 	
 	$.blockUI();
 	
-	var params="action=getPhotos&album_id="+aid;
+	var params="action=getPhotos&album_id="+settings.aid+"&application_id="+settings.app_id;
 	
 	$.ajax({
 
