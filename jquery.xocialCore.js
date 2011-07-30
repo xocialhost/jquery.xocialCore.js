@@ -579,6 +579,46 @@ $.xcEvents = function(options){
 	return returnme;
 }
 
+$.xcGetPhotos = function(options) {
+	
+	var settings = {
+	  
+	  'aid'			:	null,
+	  'callback'    :	null,
+	  'app_id'		:	null
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	$.blockUI();
+	
+	var params="action=getPhotos&album_id="+aid;
+	
+	$.ajax({
+
+	  dataType: 'json',
+	  type: 'POST',
+	  data: params,
+	  url: '/xc_core_helper',
+	  
+	  success: function (response) {
+		  
+		$.unblockUI();
+		
+		  
+	},
+	  error: function(){
+		  
+		  		$.unblockUI();
+		  
+				$.xcNotify('There was an error processing your request');
+		   }
+	});
+	
+}
 
 // Utility Section
 
