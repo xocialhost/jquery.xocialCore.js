@@ -604,9 +604,15 @@ $.xcGetPhotos = function(options) {
 	  data: params,
 	  url: '/xc_core_helper',
 	  
-	  success: function (response) {
+	  success: function (data) {
 		  
 		$.unblockUI();
+		
+		if(typeof (settings.callback) == 'function') {
+					
+			settings.callback.call(this, data);
+		
+		} else { return false; }
 		
 		  
 	},
