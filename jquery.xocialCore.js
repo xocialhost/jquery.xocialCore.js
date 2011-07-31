@@ -610,7 +610,7 @@ $.xcGetPhotos = function(options) {
 		
 		if(typeof (settings.callback) == 'function') {
 					
-			settings.callback.call(this, data.photos);
+			settings.callback.call(this, data.photos.data);
 		
 		} else { return false; }
 		
