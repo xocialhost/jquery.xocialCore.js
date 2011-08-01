@@ -32,7 +32,7 @@
 	
 $.getScript('https://raw.github.com/malsup/blockui/master/jquery.blockUI.js');	
 $.getScript('https://xocialhost.com/resources/scripts/libs/mdetect.js');
-$.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js');
+if(! $.easing.def ) { $.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js'); }
 
 // Facebook Initialization and Login Functions
 	
