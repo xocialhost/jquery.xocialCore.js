@@ -842,10 +842,18 @@ $.xcFanGate = function(options){
 		if($("#splitCss")) $("#splitCss").remove();
 		$("head").prepend(css);
 		
-		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
+		$.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js',function(){
+		
+			$.getScript('/resources/scripts/libs/mdetect.js',function(){
 			
-			$('body').splitscreen(settings);
-			
+				$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
+					
+					$('body').splitscreen(settings);
+					
+				});
+				
+			});
+		
 		});
 		
 		return;
@@ -856,6 +864,66 @@ $.xcFanGate = function(options){
 	  
 	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 }
+
+$.xcUpdatePagePreferences = function(options){
+	
+	$.blockUI();
+	
+	var settings = {
+		
+	  'pageId'		:	'',	
+	  'form'		:	null
+	  
+	};
+	
+	if ( options ) { 
+		$.extend( settings, options );
+	  }
+	  
+	settings.params = $('#'+settings.form).serialize();
+	  
+	FB.getLoginStatus(function(response) {
+		
+		  if (response.status === 'connected') { 
+		  
+		  	settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
+			
+			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
+			
+			settings.params=settings.params+'&action=updatePagePreferences';
+			
+			$.ajax({
+
+			  dataType: 'json',
+			  type: 'POST',
+			  data: settings.params,
+			  async:false,
+			  url: '/xc_core_helper',
+			  
+			  success: function (response) {
+				  
+					$.unblockUI();
+					
+					$.xcNotify('<span style="font-size:12px;font-weight:bold;">Update Process Complete</span>');
+				
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+				   }
+			});
+			 
+			
+		 }
+	});
+	
+	$.unblockUI();
+	
+}
+
+
 
 $.trim = function (strng) {
 	
