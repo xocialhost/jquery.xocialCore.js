@@ -31,6 +31,8 @@
 ;(function($) {
 	
 $.getScript('https://raw.github.com/malsup/blockui/master/jquery.blockUI.js');	
+$.getScript('https://xocialhost.com/resources/scripts/libs/mdetect.js');
+$.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js');
 
 // Facebook Initialization and Login Functions
 	
@@ -842,18 +844,10 @@ $.xcFanGate = function(options){
 		if($("#splitCss")) $("#splitCss").remove();
 		$("head").prepend(css);
 		
-		$.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js',function(){
-		
-			$.getScript('//xocialhost.com/resources/scripts/libs/mdetect.js',function(){
+		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
 			
-				$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
-					
-					$('body').splitscreen(settings);
-					
-				});
-				
-			});
-		
+			$('body').splitscreen(settings);
+			
 		});
 		
 		return;
