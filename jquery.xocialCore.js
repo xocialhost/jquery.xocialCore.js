@@ -828,7 +828,13 @@ $.xcFanGate = function(options){
 	  }
 	  
 	//Need to make sure we're a xocialhost domain.  If not use blockUI;
-	alert(window.location.host);
+	if( window.location.host!='xocialhost.com' && window.location.host!='www.xocialhost.com') {
+		
+		if(typeof $.blockUI == 'function'){  $.blockUI({message:'<img src="'+settings.imageBG+'" style="width:90%;">'}); }
+	
+		return;
+		
+	}
 	
 	if( typeof( $.fn.splitscreen ) == 'undefined') {
 	
