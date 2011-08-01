@@ -808,7 +808,14 @@ $.xcFanGate = function(options){
     	/* Align Buttons*/
     	verticalAlignBtn:	'middle',			
     	
-    
+    	/* Images */
+		imageDir: 			'/resources/css/splitscreenimg/', // Image directory for splitscreen images 
+		imageBG:			'/resources/css/splitscreenimg/caution.png', 	// Splitscreen background image is increased to fullscreen ('background.png')
+		imageWidthBG: 		520, 				// ^Required: Actual width of the background image 
+		imageHeightBG:		800, 				// ^Required: Actual height of the background image		
+		imageRaster:		'raster00.png', 	// Raster image to use
+		alphaRaster:		'80', 				// Alpha transparency of the raster image (i.e. '80', range is '0' to '99') 	
+		imageCenter:		'/resources/css/splitscreenimg/logo-large.png',	// Center image	to use
     
     	/* Underlay */
     	colorUnderlay:			'#000000',			
@@ -830,8 +837,6 @@ $.xcFanGate = function(options){
 			
 			$('body').splitscreen(settings);
 			
-			//$.xcFanGate(options);
-		
 		});
 		
 		return;
@@ -840,12 +845,8 @@ $.xcFanGate = function(options){
 	
 	
 	
-	
+	$('body').splitscreen(settings);
 	  
-	// $.setTimeout($('body').splitscreen(settings),500);
-    
-        
-	
 	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 	
 	
