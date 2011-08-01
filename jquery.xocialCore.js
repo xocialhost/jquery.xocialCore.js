@@ -782,6 +782,16 @@ $.xcNotify = function(msg){
 
 $.xcFanGate = function(options){
 	
+	if( typeof( $.fn.splitscreen ) == 'undefined') {
+	
+		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js');
+		
+		var css= "<link rel='stylesheet' id='splitCss' type='text/css' href='https://xocialhost.com/resources/css/splitscreen.css' title='tyle'  media='screen'/>";
+		if($("#splitCss")) $("#splitCss").remove();
+		$("head").prepend(css);
+		
+	}
+	
 	var settings = {
 		
 	  
