@@ -794,11 +794,13 @@ $.xcFanGate = function(options){
 		
 		});
 		
+		alert('here');
+		
 		return;
 		
 	}
 	
-	alert('here');
+	
 	
 	var settings = {
 		
