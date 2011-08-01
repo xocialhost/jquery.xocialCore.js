@@ -828,6 +828,7 @@ $.xcFanGate = function(options){
 	  }
 	  
 	//Need to make sure we're a xocialhost domain.  If not use blockUI;
+	alert(window.location.host);
 	
 	if( typeof( $.fn.splitscreen ) == 'undefined') {
 	
