@@ -782,24 +782,6 @@ $.xcNotify = function(msg){
 
 $.xcFanGate = function(options){
 	
-	if( typeof( $.fn.splitscreen ) == 'undefined') {
-	
-		var css= "<link rel='stylesheet' id='splitCss' type='text/css' href='https://xocialhost.com/resources/css/splitscreen.css' title='tyle'  media='screen'/>";
-		if($("#splitCss")) $("#splitCss").remove();
-		$("head").prepend(css);
-		
-		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
-			
-			$.xcFanGate(options);
-		
-		});
-		
-		return;
-		
-	}
-	
-	
-	
 	var settings = {
 		
 		callback:null,
@@ -837,8 +819,30 @@ $.xcFanGate = function(options){
 	if ( options ) { 
 		$.extend( settings, options );
 	  }
+	
+	if( typeof( $.fn.splitscreen ) == 'undefined') {
+	
+		var css= "<link rel='stylesheet' id='splitCss' type='text/css' href='https://xocialhost.com/resources/css/splitscreen.css' title='tyle'  media='screen'/>";
+		if($("#splitCss")) $("#splitCss").remove();
+		$("head").prepend(css);
+		
+		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
+			
+			$('body').splitscreen(settings);
+			
+			//$.xcFanGate(options);
+		
+		});
+		
+		return;
+		
+	}
+	
+	
+	
+	
 	  
-	 $.setTimeout($('body').splitscreen(settings),500);
+	// $.setTimeout($('body').splitscreen(settings),500);
     
         
 	
