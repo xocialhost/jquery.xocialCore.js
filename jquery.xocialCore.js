@@ -784,22 +784,65 @@ $.xcFanGate = function(options){
 	
 	if( typeof( $.fn.splitscreen ) == 'undefined') {
 	
-		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js');
-		
 		var css= "<link rel='stylesheet' id='splitCss' type='text/css' href='https://xocialhost.com/resources/css/splitscreen.css' title='tyle'  media='screen'/>";
 		if($("#splitCss")) $("#splitCss").remove();
 		$("head").prepend(css);
 		
+		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
+			
+			$.xcFanGate(options);
+		
+		});
+		
+		return;
+		
 	}
+	
+	alert('here');
 	
 	var settings = {
 		
+		callback:null,
+		/* Mode */
+        splitMode:        'teaser',            
+        cookieName:        'splitscreen',			
+    	
+    	/* True or False */
+    	showFade:			true,				
+    	showRaster:			true, 				
+    	showCenter:			true, 				
+    	showUnderlay:		true,					
+    	showIntroSplit:		true, 				
+    	showAutoSplit:		true, 				
+    	showHints:			false, 				
+    
+    	/* Timer */
+    	splitTimeIntro: 	2000, 		
+    	splitTimeAuto:		15000, 
+    
+    	/* Align Teaser */
+    	verticalAlignTeaser:	'middle',		 		
+    
+    	/* Align Buttons*/
+    	verticalAlignBtn:	'middle',			
+    	
+    
+    
+    	/* Underlay */
+    	colorUnderlay:			'#000000',			
+    	alphaUnderlay:			'75'	
 	  
 	};
 	
 	if ( options ) { 
 		$.extend( settings, options );
 	  }
+	  
+	 $('body').splitscreen(settings);
+    
+        
+	
+	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 	
 	
 }
