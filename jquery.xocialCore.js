@@ -826,6 +826,8 @@ $.xcFanGate = function(options){
 	if ( options ) { 
 		$.extend( settings, options );
 	  }
+	  
+	//Need to make sure we're a xocialhost domain.  If not use blockUI;
 	
 	if( typeof( $.fn.splitscreen ) == 'undefined') {
 	
@@ -843,13 +845,9 @@ $.xcFanGate = function(options){
 		
 	}
 	
-	
-	
 	$('body').splitscreen(settings);
 	  
 	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
-	
-	
 }
 
 $.trim = function (strng) {
