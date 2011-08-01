@@ -226,12 +226,13 @@ $.xcGetXocializeAccount = function(options){
 
 $.xcUpdateXocializeAccount = function(options){
 	
+	$.blockUI();
+	
 	var settings = {
 		
 	  'pageId'		:	'',	
 	  'account'	    :   '',
 	  'accountId'	:	'',
-	  'callback'	:	null,
 	  'params'		:	''
 	  
 	};
@@ -244,21 +245,46 @@ $.xcUpdateXocializeAccount = function(options){
 		
 		  if (response.status === 'connected') { 
 		  
-		  	var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?&access_token="+response.authResponse.accessToken+"&account_id="+settings.accountId;
-	  
-			  // AJAX request the API
-			  $.getJSON(url, function(data){
+		  	settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
+			
+			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
+			
+			settings.params=settings.params+'&account_id='+settings.accountId; 
+			
+			settings.params=settings.params+'&account='+settings.account; 
+			
+			settings.params=settings.params+'&page_id='+settings.pageId;
+			
+			settings.params=settings.params+'&action=updateXocialize';
+			
+			$.ajax({
+
+			  dataType: 'json',
+			  type: 'POST',
+			  data: settings.params,
+			  async:false,
+			  url: '/xc_core_helper',
+			  
+			  success: function (response) {
 				  
-				if(typeof settings.callback == 'function') {
+					$.unblockUI();
+					
+					$.xcNotify('<span style="font-size:12px;font-weight:bold;">Update Process Complete</span>');
 				
-				  settings.callback.call(this, data);
+				},
+			  error: function(){
 				  
-				} else
-				  return false;
-			  });
-		  
-		  }
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+				   }
+			});
+			 
+			
+		 }
 	});
+	
+	$.unblockUI();
 	
 }
 
@@ -307,12 +333,13 @@ $.fn.loadYouTubeVideo = function(options){
 //Based largely on jGFeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
 $.xcGFeed = function(options,callbackFnk){
 	
-	$.blockUI();
+	//$.blockUI();
 	
 	var settings = {
 	  
-	  'url'	:	null,
-	  'num'	:  8
+	  'url'		:	null,
+	  'callback':	null,
+	  'num'		:  8
 	  
 	};
 	
@@ -326,40 +353,63 @@ $.xcGFeed = function(options,callbackFnk){
 	  if(settings.num != null) gurl += "&num="+settings.num;
 	  if(settings.key != null) gurl += "&key="+settings.key;
 	  // AJAX request the API
-	  $.getJSON(gurl, function(data){
-		if(typeof callbackFnk == 'function') {
-		
-		  callbackFnk.call(this, data.responseData.feed);
-		  
-		  $.unblockUI();
-		  
-		} else
-		  return false;
-	  });
-	
+	  
+	  $.ajax({
+
+			  dataType: 'jsonp',
+			  url: gurl,
+			  timeout:5000,
+			  success: function (data) {
+				  
+					if(typeof (settings.callback) == 'function') {
+					
+						settings.callback.call(this, data.responseData.feed);
+					
+					} else { return false; }
+				
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+						
+						var data={};
+						
+						data.error=1;
+						
+						if(typeof (settings.callback) == 'function') {
+					
+							settings.callback.call(this, data);
+					
+						} else { return false; }
+				   },
+			  statusCode: {
+				404: function() {
+				  alert('page not found');
+				}
+			  }
+				  
+			});
+	  
 }
 
 // Based in large part on jQuery.tweetable from 
 $.xcTweetable = function (options) {
 	
-		var date1 = new Date()
-		
-		date1=date1.toUTCString();
-		
 		//specify the plugins defauls
-        var defaults = {
-			callback: null,
+        var settings = {
             limit: 15, 						//number of tweets to show
-            username: 'xocialhost', 	//@username tweets to display
+            username: 'xocialhost',
+			callback:null, 	
             time: false, 					//display date
             replies: false,				//filter out @replys
             position: 'append'			//append position
         };
         //overwrite the defaults
-        var options = $.extend(defaults, options);
+        var options = $.extend(settings, options);
 		
 		//assign our initial vars
-            var act = $(this);
             var $tweetList;
             var tweetMonth = '';
             var shortMonths = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
@@ -370,18 +420,50 @@ $.xcTweetable = function (options) {
        // return this.each(function (options) {
 			
             //do a JSON request to twitters API
-           $.getJSON(api + defaults.username + count + defaults.limit + "&callback=?", act, function (data) {
-				
-				if(typeof settings.callback == 'function') {
-					
-					settings.callback.call(this, data);
+			
+			$.ajax({
+
+			  dataType: 'jsonp',
+			  url: api + settings.username + count + settings.limit,
+			  timeout:2000,
+			  success: function (data) {
 				  
-				} else
-				  return false;
+					if(typeof (settings.callback) == 'function') {
+					
+						settings.callback.call(this, data);
+					
+					} else { return false; }
 				
-               });
+				},
+			  error: function(){
+				  
+				  		$.unblockUI();
+				  
+						$.xcNotify('There was an error processing your request');
+						
+						var data={};
+						
+						data.error=1;
+						
+						if(typeof (settings.callback) == 'function') {
+					
+							settings.callback.call(this, data);
+					
+						} else { return false; }
+				   },
+			  statusCode: {
+				404: function() {
+				  alert('page not found');
+				}
+			  }
+				  
+			});
+			
+           
+		   
         
 }
+
 
 $.fn.xcCalendar = function(options,callback){
 	
@@ -497,6 +579,52 @@ $.xcEvents = function(options){
 	return returnme;
 }
 
+$.xcGetPhotos = function(options) {
+	
+	var settings = {
+	  
+	  'aid'			:	null,
+	  'callback'    :	null,
+	  'app_id'		:	null
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	$.blockUI();
+	
+	var params="action=getPhotos&album_id="+settings.aid+"&application_id="+settings.app_id;
+	
+	$.ajax({
+
+	  dataType: 'json',
+	  type: 'POST',
+	  data: params,
+	  url: '/xc_core_helper',
+	  
+	  success: function (data) {
+		  
+		$.unblockUI();
+		
+		if(typeof (settings.callback) == 'function') {
+					
+			settings.callback.call(this, data);
+		
+		} else { return false; }
+		
+		  
+	},
+	  error: function(){
+		  
+		  		$.unblockUI();
+		  
+				$.xcNotify('There was an error processing your request');
+		   }
+	});
+	
+}
 
 // Utility Section
 
