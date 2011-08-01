@@ -794,8 +794,6 @@ $.xcFanGate = function(options){
 		
 		});
 		
-		alert('here');
-		
 		return;
 		
 	}
@@ -840,7 +838,7 @@ $.xcFanGate = function(options){
 		$.extend( settings, options );
 	  }
 	  
-	 $('body').splitscreen(settings);
+	 $.setTimeout($('body').splitscreen(settings),500);
     
         
 	
