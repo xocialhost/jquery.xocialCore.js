@@ -844,7 +844,7 @@ $.xcFanGate = function(options){
 		
 		$.getScript('//xocialhost.com/resources/scripts/libs/jquery.easing-1.3.js',function(){
 		
-			$.getScript('/resources/scripts/libs/mdetect.js',function(){
+			$.getScript('//xocialhost.com/resources/scripts/libs/mdetect.js',function(){
 			
 				$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
 					
