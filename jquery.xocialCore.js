@@ -46,7 +46,7 @@ $.xcInitFacebook = function(options){
 	  
 	  'appId'		:	null,
 	  'callback'	:	null,
-	  'channelUrl'  :   null,
+	  'channelUrl'  :   'xocialhost.com/channelurl/',
 	  'status'		:	true,
 	  'cookie'		:	true,
 	  'xfbml'		:	true
@@ -66,6 +66,8 @@ $.xcInitFacebook = function(options){
 			FB.init({appId: settings.appId, status: settings.status, cookie: settings.cookie, xfbml: settings.xfbml, oauth: true, authResponse: true }); 
 			
 		} else {
+			
+			settings.channelUrl=location.protocol+'//'+settings.channelUrl;
 			
 			FB.init({appId: settings.appId, status: settings.status, cookie: settings.cookie, xfbml: settings.xfbml, oauth: true, authResponse: true, channelUrl: settings.channelUrl }); 
 		}
@@ -307,7 +309,7 @@ $.fn.loadVimeoVideo = function(options){
     $.extend( settings, options );
     }
     
-    $(this).html('<iframe src="http://player.vimeo.com/video/'+settings.videoId+'?title=0&amp;byline=0&amp;portrait=0&amp;color='+settings.color+'" width="'+settings.width+'" height="'+settings.height+'" frameborder="0"></iframe>');
+    $(this).html('<iframe src="//player.vimeo.com/video/'+settings.videoId+'?title=0&amp;byline=0&amp;portrait=0&amp;color='+settings.color+'" width="'+settings.width+'" height="'+settings.height+'" frameborder="0"></iframe>');
     
 }
 
@@ -326,7 +328,7 @@ $.fn.loadYouTubeVideo = function(options){
     $.extend( settings, options );
     }
     
-    $(this).html('<iframe width="'+settings.width+'" height="'+settings.height+'" src="http://www.youtube.com/embed/'+settings.videoId+'?rel=0" frameborder="0" allowfullscreen></iframe>');
+    $(this).html('<iframe width="'+settings.width+'" height="'+settings.height+'" src="//www.youtube.com/embed/'+settings.videoId+'?rel=0" frameborder="0" allowfullscreen></iframe>');
     
 }
 
@@ -581,6 +583,53 @@ $.xcEvents = function(options){
 	return returnme;
 }
 
+$.xcGetAlbums = function(options) {
+	
+	var settings = {
+	  
+	  'graph_id'	:	null,
+	  'callback'    :	null,
+	  'app_id'		:	null
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	$.blockUI();
+	
+	var params="action=getAlbums&graph_id="+settings.graph_id+"&application_id="+settings.app_id;
+	
+	$.ajax({
+
+	  dataType: 'json',
+	  type: 'POST',
+	  data: params,
+	  url: '/xc_core_helper',
+	  
+	  success: function (data) {
+		  
+		$.unblockUI();
+		
+		if(typeof (settings.callback) == 'function') {
+					
+			settings.callback.call(this, data);
+		
+		} else { return false; }
+		
+		  
+	},
+	  error: function(){
+		  
+		  		$.unblockUI();
+		  
+				$.xcNotify('There was an error processing your request');
+		   }
+	});
+	
+}
+
 $.xcGetPhotos = function(options) {
 	
 	var settings = {
@@ -627,6 +676,8 @@ $.xcGetPhotos = function(options) {
 	});
 	
 }
+
+
 
 // Utility Section
 
