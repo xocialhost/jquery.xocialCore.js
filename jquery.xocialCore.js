@@ -653,7 +653,7 @@ $.xcGetPhotos = function(options) {
 	  dataType: 'json',
 	  type: 'POST',
 	  data: params,
-	  timeout:15000,
+	  timeout:25000,
 	  url: '/xc_core_helper',
 	  
 	  success: function (data) {
