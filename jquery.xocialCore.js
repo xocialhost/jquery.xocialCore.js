@@ -173,7 +173,7 @@ $.xcFbLogin = function(options){
 						  
 						  } else { $.xcNotify('Extended Permissions Required'); }
 						  
-					  });
+					  },{scope:settings.permissions});
 				
 				
 			} else {
@@ -186,7 +186,7 @@ $.xcFbLogin = function(options){
 					  
 					  } else { $.xcNotify('Extended Permissions Required'); }
 					  
-				  },{scope:settings.permissions});
+				  });
 				  
 			}
 			
