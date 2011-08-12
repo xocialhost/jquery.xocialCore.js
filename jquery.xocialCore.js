@@ -632,6 +632,7 @@ $.xcGetPhotos = function(options) {
 	  
 	  'aid'			:	null,
 	  'callback'    :	null,
+	  'maxPhotos'	:	null,
 	  'app_id'		:	null
 	  
 	};
@@ -642,7 +643,7 @@ $.xcGetPhotos = function(options) {
 	
 	$.blockUI();
 	
-	var params="action=getPhotos&album_id="+settings.aid+"&application_id="+settings.app_id;
+	var params="action=getPhotos&album_id="+settings.aid+"&application_id="+settings.app_id+"&maxPhotos="+settings.maxPhotos;
 	
 	$.ajax({
 
@@ -703,17 +704,21 @@ $.fn.xcAjax = function (options) {
 	  
 	if (settings.action!='') { if ( settings.params == '' )  { settings.params='action='+settings.action; } else { settings.params=settings.params+'&action='+settings.action; } }
 	
-	FB.getLoginStatus(function(response) {
+	if(typeof (FB) === 'function') {
 		
-		  if (response.status === 'connected') { 
-		  
-		  	if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+		FB.getLoginStatus(function(response) {
 			
-			if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
-		  
-		  }
-	});
-	
+			  if (response.status === 'connected') { 
+			  
+				if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+				
+				if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
+			  
+			  }
+		});
+		
+	}
+		
 	if(typeof settings.preCallback == 'function'){ settigs.preCallback.call(this); }
 		  
 	$.ajax({
