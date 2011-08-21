@@ -81,7 +81,7 @@ $.xcInitFacebook = function(options){
 	  
 }
 	
-$.fn.xcFbLogin = function(options){
+$.fn.xcFbLoginx = function(options){
 	
 	var button = document.getElementById($(this).attr('id'));
 	
@@ -96,11 +96,9 @@ $.fn.xcFbLogin = function(options){
 	$.extend( settings, options );
 	}
 	
-	
-	
 	button.onclick = function() {
 		 
-		alert('onclick'); 
+		
 		FB.getLoginStatus(function(response) {
 			  if (response.status === 'connected') { //Logged in let's check the permissions
 			  
@@ -198,6 +196,40 @@ $.fn.xcFbLogin = function(options){
 			},true);	 
 		 
 	}
+}
+
+	
+$.fn.xcFbLogin = function(options){
+	
+	var button = document.getElementById($(this).attr('id'));
+	
+	var settings = {
+	  
+	  'permissions'		:	null,
+	  'callback'		:	null
+	  
+	};
+	
+	if ( options ) { 
+	$.extend( settings, options );
+	}
+	
+	button.onclick = function() {
+		  
+		FB.login(function(response) {
+			
+		  if (response.status === 'connected') {
+			  
+			  $.onLogin(response);
+			   
+		  } else {
+			$.xcNotify('You need to login and grant permissions');
+		  }
+		  
+		}, {scope:'manage_pages,publish_stream,offline_access'}); 
+		
+		return false; 	
+	  }
 }
 
 
