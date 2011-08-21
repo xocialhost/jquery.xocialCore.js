@@ -96,8 +96,11 @@ $.fn.xcFbLogin = function(options){
 	$.extend( settings, options );
 	}
 	
+	
+	alert('beforeclick');
 	button.onclick = function() {
 		 
+		alert('onclick'); 
 		FB.getLoginStatus(function(response) {
 			  if (response.status === 'connected') { //Logged in let's check the permissions
 			  
