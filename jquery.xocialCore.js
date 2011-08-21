@@ -145,6 +145,9 @@ $.fn.xcFbLogin = function(options){
 				  
 				}, {scope:settings.permissions}); 
 			
+			} else {
+				
+				if(typeof settings.callback == 'function'){ settings.callback.call(this,response); }
 			}
 			
 	   });
