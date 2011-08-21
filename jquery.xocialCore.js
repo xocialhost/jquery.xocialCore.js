@@ -203,6 +203,8 @@ $.fn.xcFbLogin = function(options){
 	
 	var button = document.getElementById($(this).attr('id'));
 	
+	var hasPermission=1;
+	
 	var settings = {
 	  
 	  'permissions'		:	null,
@@ -230,7 +232,7 @@ $.fn.xcFbLogin = function(options){
 								  
 								  var perms=settings.permissions.split(',');
 								  
-								  var hasPermission=1;
+								  
 								  
 								  $.each(perms, function(index, value) {
 									  
@@ -241,22 +243,26 @@ $.fn.xcFbLogin = function(options){
 								   });
 						});
 			  }
-		});
-		  
-		FB.login(function(response) {
-			
-		  if (response.status === 'connected') {
-			  
-			  $.onLogin(response);
-			   
-		  } else {
-			$.xcNotify('You need to login and grant permissions');
-		  }
-		  
-		}, {scope:'manage_pages,publish_stream,offline_access'}); 
 		
-		return false; 	
+		  
+			FB.login(function(response) {
+				
+			  if (response.status === 'connected') {
+				  
+				  $.onLogin(response);
+				   
+			  } else {
+				$.xcNotify('You need to login and grant permissions');
+			  }
+			  
+			}, {scope:settings.permissions}); 
+			
+			return false; 	
+	  
+	  });
+	  
 	  }
+	  
 }
 
 
