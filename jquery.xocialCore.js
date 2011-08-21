@@ -93,7 +93,8 @@ $.fn.xcFbLogin = function(options){
 	var settings = {
 	  
 	  'permissions'		:	null,
-	  'callback'		:	null
+	  'callback'		:	null,
+	  'onCancel'		:	null
 	  
 	};
 	
@@ -135,10 +136,11 @@ $.fn.xcFbLogin = function(options){
 					
 				  if (response.status === 'connected') {
 					  
-					  if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+					  if(typeof settings.callback == 'function'){ settings.callback.call(this,response); }
 					   
 				  } else {
-					$.xcNotify('You need to login and grant permissions');
+					
+					  if(typeof settings.onCancel == 'function'){ settings.onCancel.call(this,response); }
 				  }
 				  
 				}, {scope:settings.permissions}); 
