@@ -183,7 +183,7 @@ $.fn.xcFbLoginx = function(options){
 										  
 						  if (response.status==='connected') { 
 						  
-							if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+							if(typeof settings.callback == 'function'){ settings.callback.call(this,response); }
 						  
 						  } else { $.xcNotify('Extended Permissions Required'); }
 						  
