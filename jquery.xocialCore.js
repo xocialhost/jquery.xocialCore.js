@@ -646,7 +646,7 @@ $.fn.xcAjax = function (options) {
 		
 	  'params'		:	'',	
 	  'preCallback'	:	null,	
-	  'postCallback':	null,	
+	  'callback'    :	null,	
 	  'target'		:	'',
 	  'form'		:	'',
 	  'action'		:   '',
@@ -676,7 +676,7 @@ $.fn.xcAjax = function (options) {
 			  }
 		});
 		
-	}
+	} else { $.xcNotify('Missing FB'); }
 		
 	if(typeof settings.preCallback == 'function'){ settigs.preCallback.call(this); }
 		  
@@ -698,7 +698,7 @@ $.fn.xcAjax = function (options) {
 			 
 		}
 		  
-			if(typeof settings.postCallback == 'function'){ settings.postCallback.call(this); }
+			if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 		 
 		},
 	  error: function(){
