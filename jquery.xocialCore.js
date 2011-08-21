@@ -215,6 +215,28 @@ $.fn.xcFbLogin = function(options){
 	}
 	
 	button.onclick = function() {
+		
+		var FQL = 'SELECT '+settings.permissions+' FROM permissions WHERE uid='+response.authResponse.userID;
+						
+						FB.api(
+							  {
+								method: 'fql.query',
+								query: FQL
+							  },
+							  function(response) {
+								  
+								  var perms=settings.permissions.split(',');
+								  
+								  var hasPermission=1;
+								  
+								  $.each(perms, function(index, value) {
+									  
+									  value=$.trim(value);
+									  
+									  if(response[0][value]!="1" || response[0][value]=='undefined'){ hasPermission=0; }
+									   
+								   });
+		});
 		  
 		FB.login(function(response) {
 			
