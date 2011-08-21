@@ -663,21 +663,25 @@ $.fn.xcAjax = function (options) {
 	  
 	if (settings.action!='') { if ( settings.params == '' )  { settings.params='action='+settings.action; } else { settings.params=settings.params+'&action='+settings.action; } }
 	
-	if(typeof (FB.getLoginStatus) === 'function') {
-		
-		FB.getLoginStatus(function(response) {
+	if(typeof (FB) != 'undefined') {
+	
+		if(typeof (FB.getLoginStatus) === 'function') {
 			
-			  if (response.status === 'connected') { 
-			  
-				if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+			FB.getLoginStatus(function(response) {
 				
-				if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
-			  
-			  }
-		});
+				  if (response.status === 'connected') { 
+				  
+					if ( settings.params == '' )  { settings.params='access_token='+settings.action; } else { settings.params=settings.params+'&access_token='+response.authResponse.accessToken; } 
+					
+					if ( settings.params == '' )  { settings.params='signed_request='+settings.action; } else { settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; } 
+				  
+				  }
+			});
+			
+		}
 		
-	} else { $.xcNotify('Missing FB'); }
-		
+	}
+	
 	if(typeof settings.preCallback == 'function'){ settigs.preCallback.call(this); }
 		  
 	$.ajax({
