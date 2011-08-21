@@ -83,11 +83,7 @@ $.xcInitFacebook = function(options){
 	
 $.fn.xcFbLogin = function(options){
 	
-	
-	
-	var button = document.getElementById(this.id);
-	
-	alert(this.id);
+	var button = document.getElementById($(this).attr('id'));
 	
 	var settings = {
 	  
@@ -99,6 +95,8 @@ $.fn.xcFbLogin = function(options){
 	if ( options ) { 
 	$.extend( settings, options );
 	}
+	
+	
 	
 	button.onclick = function() {
 		 
