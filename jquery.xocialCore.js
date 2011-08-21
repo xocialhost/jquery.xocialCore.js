@@ -81,7 +81,9 @@ $.xcInitFacebook = function(options){
 	  
 }
 	
-$.xcFbLogin = function(options){
+$fn.xcFbLogin = function(options){
+	
+	var button = $(this);
 	
 	var settings = {
 	  
@@ -94,59 +96,90 @@ $.xcFbLogin = function(options){
 	$.extend( settings, options );
 	}
 	
-	FB.getLoginStatus(function(response) {
-		  if (response.status === 'connected') { //Logged in let's check the permissions
-		  
-		  		if(settings.permissions!=null) {
-		  
-					var FQL = 'SELECT '+settings.permissions+' FROM permissions WHERE uid='+response.authResponse.userID;
-					
-					FB.api(
-						  {
-							method: 'fql.query',
-							query: FQL
-						  },
-						  function(response) {
-							  
-							  var perms=settings.permissions.split(',');
-							  
-							  var hasPermission=1;
-							  
-							  $.each(perms, function(index, value) {
+	button.onclick = function() {
+		 
+		FB.getLoginStatus(function(response) {
+			  if (response.status === 'connected') { //Logged in let's check the permissions
+			  
+					if(settings.permissions!=null) {
+			  
+						var FQL = 'SELECT '+settings.permissions+' FROM permissions WHERE uid='+response.authResponse.userID;
+						
+						FB.api(
+							  {
+								method: 'fql.query',
+								query: FQL
+							  },
+							  function(response) {
 								  
-								  value=$.trim(value);
+								  var perms=settings.permissions.split(',');
 								  
-								  if(response[0][value]!="1" || response[0][value]=='undefined'){ hasPermission=0; }
-								   
-							   });
-							  
-							  if(hasPermission==1){
+								  var hasPermission=1;
 								  
-								  if(typeof settings.callback == 'function'){ settings.callback.call(this); }
-								  
-							  } else {
-								  
-								  FB.login(function(response){
+								  $.each(perms, function(index, value) {
 									  
-									  if (response.status==='connected') { 
+									  value=$.trim(value);
 									  
-										if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+									  if(response[0][value]!="1" || response[0][value]=='undefined'){ hasPermission=0; }
+									   
+								   });
+								  
+								  if(hasPermission==1){
 									  
-									  } else { $.xcNotify('Extended Permissions Required'); }
+									  if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 									  
-								  },{scope:settings.permissions});
+								  } else {
+									  
+									  FB.login(function(response){
+										  
+										  if (response.status==='connected') { 
+										  
+											if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+										  
+										  } else { $.xcNotify('Extended Permissions Required'); }
+										  
+									  },{scope:settings.permissions});
+									  
+									  
+								  }
+								  
 								  
 								  
 							  }
+							);
+					} else {
+						
+						 FB.login(function(response){
+										  
+							  if (response.status==='connected') { 
 							  
+								if(typeof settings.callback == 'function'){ settings.callback.call(this); }
 							  
+							  } else { $.xcNotify('Extended Permissions Required'); }
 							  
-						  }
-						);
-				} else {
+						  });
+						
+					}
+				
+			 } else { //No Login At All
+			 
+				if(settings.permissions!=null) {
 					
 					 FB.login(function(response){
-									  
+										  
+							  if (response.status==='connected') { 
+							  
+								if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+							  
+							  } else { $.xcNotify('Extended Permissions Required'); }
+							  
+						  },{scope:settings.permissions});
+					
+					
+				} else {
+				
+					 FB.login(function(response){
+										  
 						  if (response.status==='connected') { 
 						  
 							if(typeof settings.callback == 'function'){ settings.callback.call(this); }
@@ -154,42 +187,18 @@ $.xcFbLogin = function(options){
 						  } else { $.xcNotify('Extended Permissions Required'); }
 						  
 					  });
-					
+					  
 				}
+				
+			  }
 			
-		 } else { //No Login At All
+			},true);	 
 		 
-		 	if(settings.permissions!=null) {
-				
-				 FB.login(function(response){
-									  
-						  if (response.status==='connected') { 
-						  
-							if(typeof settings.callback == 'function'){ settings.callback.call(this); }
-						  
-						  } else { $.xcNotify('Extended Permissions Required'); }
-						  
-					  },{scope:settings.permissions});
-				
-				
-			} else {
-			
-				 FB.login(function(response){
-									  
-					  if (response.status==='connected') { 
-					  
-						if(typeof settings.callback == 'function'){ settings.callback.call(this); }
-					  
-					  } else { $.xcNotify('Extended Permissions Required'); }
-					  
-				  });
-				  
-			}
-			
-		  }
+		 
+		  
 		
-		},true);
-	
+		
+	 }
 }
 
 
