@@ -663,7 +663,7 @@ $.fn.xcAjax = function (options) {
 	  
 	if (settings.action!='') { if ( settings.params == '' )  { settings.params='action='+settings.action; } else { settings.params=settings.params+'&action='+settings.action; } }
 	
-	if(typeof (FB) === 'function') {
+	if(typeof (FB.getLoginStatus) === 'function') {
 		
 		FB.getLoginStatus(function(response) {
 			
