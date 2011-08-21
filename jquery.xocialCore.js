@@ -83,7 +83,7 @@ $.xcInitFacebook = function(options){
 	
 $.fn.xcFbLogin = function(options){
 	
-	var button = $(this);
+	var button = document.getElementById($(this).attr('id'));
 	
 	var settings = {
 	  
@@ -197,11 +197,7 @@ $.fn.xcFbLogin = function(options){
 			
 			},true);	 
 		 
-		 
-		  
-		
-		
-	 }
+	}
 }
 
 
