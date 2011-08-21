@@ -81,7 +81,7 @@ $.xcInitFacebook = function(options){
 	  
 }
 	
-$fn.xcFbLogin = function(options){
+$.fn.xcFbLogin = function(options){
 	
 	var button = $(this);
 	
