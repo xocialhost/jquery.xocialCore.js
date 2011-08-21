@@ -232,8 +232,6 @@ $.fn.xcFbLogin = function(options){
 								  
 								  var perms=settings.permissions.split(',');
 								  
-								  
-								  
 								  $.each(perms, function(index, value) {
 									  
 									  value=$.trim(value);
@@ -245,23 +243,28 @@ $.fn.xcFbLogin = function(options){
 			  }
 		
 		  
-			FB.login(function(response) {
+			
+			if (response.status != 'connected' || hasPermission==0 ) {
 				
-			  if (response.status === 'connected') {
+				FB.login(function(response) {
+					
+				  if (response.status === 'connected') {
+					  
+					  if(typeof settings.callback == 'function'){ settings.callback.call(this); }
+					   
+				  } else {
+					$.xcNotify('You need to login and grant permissions');
+				  }
 				  
-				  $.onLogin(response);
-				   
-			  } else {
-				$.xcNotify('You need to login and grant permissions');
-			  }
-			  
-			}, {scope:settings.permissions}); 
+				}, {scope:settings.permissions}); 
+			
+			}
 			
 			return false; 	
 	  
 	  });
 	  
-	  }
+	}  //end onclick
 	  
 }
 
