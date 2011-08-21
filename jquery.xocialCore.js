@@ -85,6 +85,8 @@ $.fn.xcFbLoginx = function(options){
 	
 	var button = document.getElementById($(this).attr('id'));
 	
+	$(this).click( function(event){ event.preventDefault(); });
+	
 	var settings = {
 	  
 	  'permissions'		:	null,
