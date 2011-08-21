@@ -216,7 +216,10 @@ $.fn.xcFbLogin = function(options){
 	
 	button.onclick = function() {
 		
-		var FQL = 'SELECT '+settings.permissions+' FROM permissions WHERE uid='+response.authResponse.userID;
+		FB.getLoginStatus(function(response) {
+			  if (response.status === 'connected') {
+				  
+				  var FQL = 'SELECT '+settings.permissions+' FROM permissions WHERE uid='+response.authResponse.userID;
 						
 						FB.api(
 							  {
@@ -236,6 +239,8 @@ $.fn.xcFbLogin = function(options){
 									  if(response[0][value]!="1" || response[0][value]=='undefined'){ hasPermission=0; }
 									   
 								   });
+						});
+			  }
 		});
 		  
 		FB.login(function(response) {
