@@ -157,144 +157,9 @@ $.fn.xcFbLogin = function(options){
 }
 
 
-//Xocialize Functions
-
-$.xcGetXocializeAccount = function(options){
-	
-	var settings = {
-		
-	  'pageId'		:	'',	
-	  'account'	    :   '',
-	  'callback'	:   null
-	  
-	};
-	
-	if ( options ) { 
-		$.extend( settings, options );
-	  }
-	  
-	var url = "//xocialize.com/api/"+settings.pageId+"/"+settings.account+"/?callback=?";
-	  
-	  // AJAX request the API
-	  $.getJSON(url, function(data){
-		  
-		if(typeof settings.callback == 'function') {
-		
-		  settings.callback.call(this, data);
-		  
-		} else
-		  return false;
-	  });
-	
-}
-
-$.xcUpdateXocializeAccount = function(options){
-	
-	$.blockUI();
-	
-	var settings = {
-		
-	  'pageId'		:	'',	
-	  'account'	    :   '',
-	  'accountId'	:	'',
-	  'params'		:	''
-	  
-	};
-	
-	if ( options ) { 
-		$.extend( settings, options );
-	  }
-	  
-	FB.getLoginStatus(function(response) {
-		
-		  if (response.status === 'connected') { 
-		  
-		  	settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
-			
-			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
-			
-			settings.params=settings.params+'&account_id='+settings.accountId; 
-			
-			settings.params=settings.params+'&account='+settings.account; 
-			
-			settings.params=settings.params+'&page_id='+settings.pageId;
-			
-			settings.params=settings.params+'&action=updateXocialize';
-			
-			$.ajax({
-
-			  dataType: 'json',
-			  type: 'POST',
-			  data: settings.params,
-			  async:false,
-			  url: '/xc_core_helper',
-			  
-			  success: function (response) {
-				  
-					$.unblockUI();
-					
-					$.xcNotify('<span style="font-size:12px;font-weight:bold;">Update Process Complete</span>');
-				
-				},
-			  error: function(){
-				  
-				  		$.unblockUI();
-				  
-						$.xcNotify('There was an error processing your request');
-				   }
-			});
-			 
-			
-		 }
-	});
-	
-	$.unblockUI();
-	
-}
 
 // Social Media Functions
 
-$.fn.loadVimeoVideo = function(options){
-    
-    var settings = {
-      
-      'videoId'	   :	'',
-	  'color'	   :	'ff0179',
-      'width'      :    '480',
-      'height'     :    '390'
-      
-     };
-    
-    if ( options ) { 
-    $.extend( settings, options );
-    }
-    
-    $(this).html('<iframe src="//player.vimeo.com/video/'+settings.videoId+'?title=0&amp;byline=0&amp;portrait=0&amp;color='+settings.color+'" width="'+settings.width+'" height="'+settings.height+'" frameborder="0"></iframe>');
-    
-}
-
-$.fn.loadYouTubeVideo = function(options){
-    
-    var settings = {
-      
-      'videoId'	   :	'',
-	  'color'	   :	'ff0179',
-      'width'      :    '480',
-      'height'     :    '390'
-      
-     };
-    
-    if ( options ) { 
-    $.extend( settings, options );
-    }
-    
-    $(this).html('<iframe width="'+settings.width+'" height="'+settings.height+'" src="//www.youtube.com/embed/'+settings.videoId+'?rel=0" frameborder="0" allowfullscreen></iframe>');
-    
-}
-
-
-
-//Based largely on jGFeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
 $.xcGFeed = function(options,callbackFnk){
 	
 	//$.blockUI();
@@ -313,7 +178,7 @@ $.xcGFeed = function(options,callbackFnk){
 	
 	 if(settings.url == null) return false;
 	  // Build Google Feed API URL
-	  var gurl = "http://ajax.googleapis.com/ajax/services/feed/load?v=1.0&callback=?&q="+encodeURIComponent(settings.url);
+	  var gurl = "https://ajax.googleapis.com/ajax/services/feed/load?v=1.0&callback=?&q="+encodeURIComponent(settings.url);
 	  if(settings.num != null) gurl += "&num="+settings.num;
 	  if(settings.key != null) gurl += "&key="+settings.key;
 	  // AJAX request the API
@@ -428,176 +293,115 @@ $.xcTweetable = function (options) {
         
 }
 
+// Social Media Functions
 
-$.fn.xcCalendar = function(options,callback){
-	
-	if( typeof( xhCurrentMonth ) == 'undefined' || typeof( xhCurrentYear ) == 'undefined' || typeof( xhCurrentDay ) == 'undefined' ) { 
-	
-		var xhDate = new Date();
-		
-		window.xhCurrentDay = xhDate.getFullYear();
-		
-		window.xhCurrentMonth = xhDate.getMonth() + 1; 
-		
-		window.xhCurrentYear = xhDate.getFullYear(); 
-		
-	}  
-	
-	$obj = $(this); 
-	
-	var settings = {
-	  
-	  'action'	:	'getCalendar'
-	  
-	};
-	
-	if ( options ) { 
-	$.extend( settings, options );
-	}
-	
-	var params=settings;
-	
-	$.blockUI();
-	
-	$.ajax({
-
-	  dataType: 'json',
-	  type: 'POST',
-	  data: params,
-	  url: '/calendar',
-	  
-	  success: function (response) {
-		  
-		  $obj.html(response.calendar);
-		  
-		  if(typeof callback == 'function'){ callback.call(this); }
-		  
-		  $.unblockUI();
-		  
-	},
-	  error: function(){
-		  
-				alert('There was an error processing your request');
-		   }
-	});
+$.fn.loadVimeoVideo = function(options){
+    
+    var settings = {
+      
+      'videoId'	   :	'',
+	  'color'	   :	'ff0179',
+      'width'      :    '480',
+      'height'     :    '390',
+	  'autoplay'   : 	0
+      
+     };
+    
+    if ( options ) { 
+    $.extend( settings, options );
+    }
+    
+    $(this).html('<iframe src="//player.vimeo.com/video/'+settings.videoId+'?wmode=transparent&title=0&amp;byline=0&amp;portrait=0&amp;color='+settings.color+'" width="'+settings.width+'" height="'+settings.height+'&autoplay='+settings.autoplay+'" frameborder="0"></iframe>');
+    
 }
 
-$.xcEvents = function(options){
-	
-	$.blockUI();
-	
-	if( typeof( xhCurrentMonth ) == 'undefined' || typeof( xhCurrentYear ) == 'undefined' || typeof( xhCurrentDay ) == 'undefined' ) { 
-	
-		var xhDate = new Date();
-		
-		window.xhCurrentDay = xhDate.getFullYear();
-		
-		window.xhCurrentMonth = xhDate.getMonth() + 1; 
-		
-		window.xhCurrentYear = xhDate.getFullYear(); 
-		
-	}  
-	
-	var settings = {
-	  
-	  'action'			:	'getMonthEvents',
-	  'timezone'		:	xh_tz_info.timezone.olson_tz,
-	  'currentDay'		:	xhCurrentDay,
-	  'currentMonth'	:	xhCurrentMonth,
-	  'currentYear'		:	xhCurrentYear,
-	  'page_id'			:	fb_page_id,
-	  'app_id'			:	fb_application_id
-	  
-	};
-	
-	if ( options ) { 
-	$.extend( settings, options );
-	}
-	
-	var params=settings;
-	
-	var returnme=[];
-	
-	$.ajax({
-
-	  dataType: 'json',
-	  type: 'POST',
-	  data: params,
-	  async:false,
-	  url: '/calendar',
-	  
-	  success: function (response) {
-		  
-		returnme = response;
-		
-		$.unblockUI();
-		
-		  
-	},
-	  error: function(){
-		  
-				$.xcNotify('There was an error processing your request');
-		   }
-	});
-	
-	return returnme;
+$.fn.loadYouTubeVideo = function(options){
+    
+    var settings = {
+      
+      'videoId'	   :	'',
+	  'color'	   :	'ff0179',
+      'width'      :    '480',
+      'height'     :    '390',
+	  'autoplay'   :    0
+      
+     };
+    
+    if ( options ) { 
+    $.extend( settings, options );
+    }
+    
+    $(this).html('<iframe width="'+settings.width+'" height="'+settings.height+'" src="//www.youtube.com/embed/'+settings.videoId+'?wmode=transparent&rel=0&autoplay='+settings.autoplay+'" frameborder="0" allowfullscreen></iframe>');
+    
 }
 
-$.xcGetAlbums = function(options) {
+
+$.xcYouTubeChannel = function(options) {
 	
 	var settings = {
 	  
-	  'graph_id'	:	null,
-	  'callback'    :	null,
-	  'app_id'		:	null
+	   callback	: null,
+	   userName: null,
+	   channel: "uploads" //options are uploads or favorites
 	  
 	};
 	
 	if ( options ) { 
 	$.extend( settings, options );
 	}
+
+
+	var gurl = "https://gdata.youtube.com/feeds/base/users/" + settings.userName + "/" + settings.channel + "?alt=json";
 	
-	$.blockUI();
-	
-	var params="action=getAlbums&graph_id="+settings.graph_id+"&application_id="+settings.app_id;
+	//alert(gurl);
 	
 	$.ajax({
 
-	  dataType: 'json',
-	  type: 'POST',
-	  data: params,
-	  url: '/xc_core_helper',
-	  
-	  success: function (data) {
-		  
-		$.unblockUI();
-		
-		if(typeof (settings.callback) == 'function') {
+		  dataType: 'jsonp',
+		  url: gurl,
+		  timeout:5000,
+		  success: function (data) {
+			  
+				if(typeof (settings.callback) == 'function') {
+				
+					settings.callback.call(this, data);
+				
+				} else { return false; }
+			
+			},
+		  error: function(){
+			  
+					$.unblockUI();
+			  
+					$.xcNotify('There was an error processing your request');
 					
-			settings.callback.call(this, data);
-		
-		} else { return false; }
-		
-		  
-	},
-	  error: function(){
-		  
-		  		$.unblockUI();
-		  
-				$.xcNotify('There was an error processing your request');
-		   }
+					var data={};
+					
+					data.error=1;
+					
+					if(typeof (settings.callback) == 'function') {
+				
+						settings.callback.call(this, data);
+				
+					} else { return false; }
+			   },
+		  statusCode: {
+			404: function() {
+			  $.xcNotify('page not found');
+			}
+		  }
+			  
 	});
-	
-}
 
-$.xcGetPhotos = function(options) {
+};
+
+
+
+$.xcGetAllFriends = function(options){
 	
 	var settings = {
 	  
-	  'aid'			:	null,
-	  'callback'    :	null,
-	  'maxPhotos'	:	null,
-	  'app_id'		:	null
+	  'callback'	: null
 	  
 	};
 	
@@ -605,39 +409,60 @@ $.xcGetPhotos = function(options) {
 	$.extend( settings, options );
 	}
 	
-	$.blockUI();
+	$.xcFbLogin({permissions:'publish_stream',callback:function(){
+		
+		FB.getLoginStatus(function(response) {
 	
-	var params="action=getPhotos&album_id="+settings.aid+"&application_id="+settings.app_id+"&maxPhotos="+settings.maxPhotos;
-	
-	$.ajax({
+		  if (response.status === 'connected') { 
+		  
+			var fburl = 'https://graph.facebook.com/me/friends?access_token='+response.authResponse.accessToken+'&limit=5000&fields=id,first_name,middle_name,last_name'; 
+			
+			$.ajax({
 
-	  dataType: 'json',
-	  type: 'POST',
-	  data: params,
-	  timeout:25000,
-	  url: '/xc_core_helper',
-	  
-	  success: function (data) {
-		  
-		$.unblockUI();
-		
-		if(typeof (settings.callback) == 'function') {
+				  dataType: 'jsonp',
+				  url: fburl,
+				  timeout:50000,
+				  success: function (data) {
+					  
+					  	data=data.data;
+					  
+					    data=data.sort($.sortByName);
+					  
+						if(typeof (settings.callback) == 'function') {
+						
+							settings.callback.call(this, data);
+						
+						} else { return false; }
 					
-			settings.callback.call(this, data);
-		
-		} else { return false; }
-		
-		  
-	},
-	  error: function(){
-		  
-		  		$.unblockUI();
-		  
-				$.xcNotify('There was an error processing your request');
-		   }
+					},
+				  error: function(){
+					  
+							$.unblockUI();
+					  
+							$.xcNotify('There was an error processing your request');
+							
+							
+					   },
+				  statusCode: {
+					404: function() {
+					  alert('page not found');
+					}
+				  }
+					  
+				});
+				
+				
+			  
+			  }
+			
+			});
+			
+		}
+	
 	});
 	
 }
+
 
 
 
@@ -803,141 +628,6 @@ $.xcNotify = function(msg){
 	}
 }
 
-$.xcFanGate = function(options){
-	
-	var settings = {
-		
-		callback:null,
-		/* Mode */
-        splitMode:        'teaser',            
-        cookieName:        'splitscreen',			
-    	
-    	/* True or False */
-    	showFade:			true,				
-    	showRaster:			true, 				
-    	showCenter:			true, 				
-    	showUnderlay:		true,					
-    	showIntroSplit:		true, 				
-    	showAutoSplit:		true, 				
-    	showHints:			false, 				
-    
-    	/* Timer */
-    	splitTimeIntro: 	2000, 		
-    	splitTimeAuto:		15000, 
-    
-    	/* Align Teaser */
-    	verticalAlignTeaser:	'middle',		 		
-    
-    	/* Align Buttons*/
-    	verticalAlignBtn:	'middle',			
-    	
-    	/* Images */
-		imageDir: 			'/resources/css/splitscreenimg/', // Image directory for splitscreen images 
-		imageBG:			'/resources/css/splitscreenimg/caution.png', 	// Splitscreen background image is increased to fullscreen ('background.png')
-		imageWidthBG: 		520, 				// ^Required: Actual width of the background image 
-		imageHeightBG:		800, 				// ^Required: Actual height of the background image		
-		imageRaster:		'raster00.png', 	// Raster image to use
-		alphaRaster:		'80', 				// Alpha transparency of the raster image (i.e. '80', range is '0' to '99') 	
-		imageCenter:		'/resources/css/splitscreenimg/logo-large.png',	// Center image	to use
-    
-    	/* Underlay */
-    	colorUnderlay:			'#000000',			
-    	alphaUnderlay:			'75'	
-	  
-	};
-	
-	if ( options ) { 
-		$.extend( settings, options );
-	  }
-	  
-	//Need to make sure we're a xocialhost domain.  If not use blockUI;
-	if( window.location.host!='xocialhost.com' && window.location.host!='www.xocialhost.com') {
-		
-		if(typeof $.blockUI == 'function'){  $.blockUI({message:'<img src="'+settings.imageBG+'" style="width:90%;">'}); }
-	
-		return;
-		
-	}
-	
-	if( typeof( $.fn.splitscreen ) == 'undefined') {
-	
-		var css= "<link rel='stylesheet' id='splitCss' type='text/css' href='https://xocialhost.com/resources/css/splitscreen.css' title='tyle'  media='screen'/>";
-		if($("#splitCss")) $("#splitCss").remove();
-		$("head").prepend(css);
-		
-		$.getScript('//xocialhost.com/resources/scripts/licensed/jquery.xcXocialGate.min.js',function(){
-			
-			$('body').splitscreen(settings);
-			
-		});
-		
-		return;
-		
-	}
-	
-	$('body').splitscreen(settings);
-	  
-	if(typeof settings.callback == 'function'){ settings.callback.call(this); }
-}
-
-$.xcUpdatePagePreferences = function(options){
-	
-	$.blockUI();
-	
-	var settings = {
-		
-	  'pageId'		:	'',	
-	  'form'		:	null
-	  
-	};
-	
-	if ( options ) { 
-		$.extend( settings, options );
-	  }
-	  
-	settings.params = $('#'+settings.form).serialize();
-	  
-	FB.getLoginStatus(function(response) {
-		
-		  if (response.status === 'connected') { 
-		  
-		  	settings.params=settings.params+'&access_token='+response.authResponse.accessToken; 
-			
-			settings.params=settings.params+'&signed_request='+response.authResponse.signedRequest; 
-			
-			settings.params=settings.params+'&action=updatePagePreferences';
-			
-			$.ajax({
-
-			  dataType: 'json',
-			  type: 'POST',
-			  data: settings.params,
-			  async:false,
-			  url: '/xc_core_helper',
-			  
-			  success: function (response) {
-				  
-					$.unblockUI();
-					
-					$.xcNotify('<span style="font-size:12px;font-weight:bold;">Update Process Complete</span>');
-				
-				},
-			  error: function(){
-				  
-				  		$.unblockUI();
-				  
-						$.xcNotify('There was an error processing your request');
-				   }
-			});
-			 
-			
-		 }
-	});
-	
-	$.unblockUI();
-	
-}
-
 
 
 $.trim = function (strng) {
@@ -977,6 +667,12 @@ $.preLoadImages = function() {
 	  cacheImage.src = arguments[i];
 	  cache.push(cacheImage);
 	}
+}
+
+$.sortByName = function (a, b) { 
+    var x = a.last_name.toLowerCase();  
+    var y = b.last_name.toLowerCase();  
+    return ((x < y) ? -1 : ((x > y) ? 1 : 0));  
 }
 
 /* end Xocial Core */	
