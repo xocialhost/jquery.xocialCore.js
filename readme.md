@@ -12,5 +12,7 @@ xocialCore includes the fantastic jQuery plugin blockUI from http://jquery.malsu
 Inspirations
 ===================================================
 youTube: http://danhounshell.com/blog/add-a-youtube-widget-to-any-web-site-with-jquery/
+
 tweetable: http://theodin.co.uk/blog/jquery/tweetable-1-6-launched.html
+
 jGfeed: http://jquery-howto.blogspot.com/2009/05/google-feeds-api-jquery-plugin.html
