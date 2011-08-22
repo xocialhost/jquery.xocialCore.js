@@ -9,6 +9,19 @@ Most of these projects have focused on fixed implementations, Xocial Core is gea
 
 xocialCore.js includes the fantastic jQuery plugin blockUI from http://jquery.malsup.com/block/
 
+Functions
+===================================================
+$.xcInitFacebook();
+
+Basic Usage: $.xcInitFacebook({appId:'yourAppId'});
+
+
+$.fn.xcFbLogin();
+
+Basic Usage: $('#element').xcFbLogin({permissions:'offline_access'});
+
+
+
 Inspirations
 ===================================================
 youTube: http://danhounshell.com/blog/add-a-youtube-widget-to-any-web-site-with-jquery/
