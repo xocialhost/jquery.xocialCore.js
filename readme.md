@@ -7,7 +7,7 @@ Several of the functions have been heavily "inspired" by other projects from aro
 
 Most of these projects have focused on fixed implementations, Xocial Core is geared more around assisting in the retrieval of the external data and the implementation is largely left to the developer.
 
-xocialCore includes the fantastic jQuery plugin blockUI from http://jquery.malsup.com/block/
+xocialCore.js includes the fantastic jQuery plugin blockUI from http://jquery.malsup.com/block/
 
 Inspirations
 ===================================================
