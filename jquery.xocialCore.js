@@ -42,7 +42,7 @@ $.xcInitFacebook = function(options){
 	  
 	  'appId'		:	null,
 	  'callback'	:	null,
-	  'channelUrl'  :   'xocialhost.com/channelurl/',
+	  'channelUrl'  :   null,
 	  'status'		:	true,
 	  'cookie'		:	true,
 	  'xfbml'		:	true
@@ -673,6 +673,13 @@ $.sortByName = function (a, b) {
     var x = a.last_name.toLowerCase();  
     var y = b.last_name.toLowerCase();  
     return ((x < y) ? -1 : ((x > y) ? 1 : 0));  
+}
+
+
+//stolen from http://snippets.dzone.com/posts/show/2099
+$.daysInMonth = function (iMonth, iYear)
+{
+    return 32 - new Date(iYear, iMonth, 32).getDate();
 }
 
 /* end Xocial Core */	
